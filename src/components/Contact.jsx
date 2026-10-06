@@ -574,11 +574,6 @@ const Contact = () => {
               <input type="hidden" name="_captcha" value="false" />
               <input type="hidden" name="_subject" value="New Contact Form Message" />
               <input type="hidden" name="_template" value="table" />
-              <input
-                type="hidden"
-                name="_next"
-                value="https://your-site.com/thank-you"
-              />
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
                 <AnimatedInput
