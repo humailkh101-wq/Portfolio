@@ -565,10 +565,8 @@ const Contact = () => {
               </p>
             </div>
             <form
-              action="https://formsubmit.com/m.humail101@gmail.com"
+              action="https://formsubmit.co/tovoh18417@cwsgear.com"
               method="POST"
-              onSubmit={handleSubmit}
-              noValidate
             >
               {/* FormSubmit settings */}
               <input type="hidden" name="_captcha" value="false" />
