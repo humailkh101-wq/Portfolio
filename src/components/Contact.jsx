@@ -5,13 +5,13 @@ import React, { useState, useEffect, useRef } from 'react';
    ========================================================= */
 const COLORS = {
   navyDeepest: '#04101F',
-  navyDark:    '#071427',
+  navyDark: '#071427',
   navyPrimary: '#0A1F3D',
-  navyLight:   '#12305C',
-  white:       '#FFFFFF',
-  greenLight:  '#86EFAC',
+  navyLight: '#12305C',
+  white: '#FFFFFF',
+  greenLight: '#86EFAC',
   greenBright: '#4ADE80',
-  greenDeep:   '#22C55E',
+  greenDeep: '#22C55E',
 };
 
 /* =========================================================
@@ -42,10 +42,10 @@ const CONTACT_DETAILS = [
 ];
 
 const SOCIALS = [
-  { name: 'GitHub',   url: 'https://github.com',    icon: '⌥' },
-  { name: 'LinkedIn', url: 'https://linkedin.com',  icon: 'in' },
-  { name: 'Twitter',  url: 'https://twitter.com',   icon: '𝕏' },
-  { name: 'Dribbble', url: 'https://dribbble.com',  icon: '◐' },
+  { name: 'GitHub', url: 'https://github.com', icon: '⌥' },
+  { name: 'LinkedIn', url: 'https://linkedin.com', icon: 'in' },
+  { name: 'Twitter', url: 'https://twitter.com', icon: '𝕏' },
+  { name: 'Dribbble', url: 'https://dribbble.com', icon: '◐' },
 ];
 
 const FAQS = [
@@ -219,9 +219,8 @@ const AnimatedInput = ({
         onBlur={handleBlur}
         className="peer w-full bg-transparent outline-none text-white text-base pt-6 pb-2 px-0 rounded-none resize-none"
         style={{
-          borderBottom: `1px solid ${
-            focused ? activeColor : hasError ? '#F87171' : 'rgba(255,255,255,0.15)'
-          }`,
+          borderBottom: `1px solid ${focused ? activeColor : hasError ? '#F87171' : 'rgba(255,255,255,0.15)'
+            }`,
           boxShadow: focused ? `0 4px 20px -8px ${activeColor}` : 'none',
           transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
         }}
@@ -235,10 +234,10 @@ const AnimatedInput = ({
           color: hasError
             ? '#F87171'
             : focused
-            ? COLORS.greenLight
-            : isActive
-            ? 'rgba(255,255,255,0.55)'
-            : 'rgba(255,255,255,0.45)',
+              ? COLORS.greenLight
+              : isActive
+                ? 'rgba(255,255,255,0.55)'
+                : 'rgba(255,255,255,0.45)',
           letterSpacing: isActive ? '0.15em' : '0',
           textTransform: isActive ? 'uppercase' : 'none',
           textShadow: focused ? `0 0 20px ${COLORS.greenLight}60` : 'none',
@@ -377,8 +376,8 @@ const FaqItem = ({ faq, index, inView }) => {
    ========================================================= */
 const Contact = () => {
   const [headerRef, headerInView] = useInView(0.15);
-  const [mainRef, mainInView]     = useInView(0.08);
-  const [faqRef, faqInView]       = useInView(0.15);
+  const [mainRef, mainInView] = useInView(0.08);
+  const [faqRef, faqInView] = useInView(0.15);
 
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
@@ -565,19 +564,36 @@ const Contact = () => {
                 Share a few details and I&apos;ll get back to you within 24 hours.
               </p>
             </div>
+            <form
+              action="https://formsubmit.com/m.humail101@gmail.com"
+              method="POST"
+              onSubmit={handleSubmit}
+              noValidate
+            >
+              {/* FormSubmit settings */}
+              <input type="hidden" name="_captcha" value="false" />
+              <input type="hidden" name="_subject" value="New Contact Form Message" />
+              <input type="hidden" name="_template" value="table" />
+              <input
+                type="hidden"
+                name="_next"
+                value="https://your-site.com/thank-you"
+              />
 
-            <form onSubmit={handleSubmit} noValidate>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
                 <AnimatedInput
                   id="name"
+                  name="name"
                   label="Your Name"
                   value={form.name}
                   onChange={handleChange}
                   required
                   autoComplete="name"
                 />
+
                 <AnimatedInput
                   id="email"
+                  name="email"
                   label="Email Address"
                   type="email"
                   value={form.email}
@@ -586,8 +602,10 @@ const Contact = () => {
                   autoComplete="email"
                 />
               </div>
+
               <AnimatedInput
                 id="message"
+                name="message"
                 label="Your Message"
                 value={form.message}
                 onChange={handleChange}
@@ -602,7 +620,6 @@ const Contact = () => {
                   variant="primary"
                   size="lg"
                   disabled={loading}
-                  onClick={handleSubmit}
                 >
                   {loading ? (
                     <>
@@ -610,7 +627,7 @@ const Contact = () => {
                         className="inline-block w-4 h-4 rounded-full border-2 animate-spin"
                         style={{
                           borderColor: COLORS.navyPrimary,
-                          borderTopColor: 'transparent',
+                          borderTopColor: "transparent",
                         }}
                       />
                       Sending…
@@ -627,7 +644,7 @@ const Contact = () => {
 
                 <p
                   className="text-xs font-semibold"
-                  style={{ color: 'rgba(255,255,255,0.4)' }}
+                  style={{ color: "rgba(255,255,255,0.4)" }}
                 >
                   🔒 Your data stays private
                 </p>
@@ -646,7 +663,7 @@ const Contact = () => {
                   className="px-4 py-3 rounded-xl text-sm font-semibold flex items-center gap-2"
                   style={{
                     color: COLORS.greenLight,
-                    background: 'rgba(134,239,172,0.10)',
+                    background: "rgba(134,239,172,0.10)",
                     border: `1px solid ${COLORS.greenLight}50`,
                     boxShadow: `0 0 30px -10px ${COLORS.greenLight}70`,
                   }}
@@ -660,6 +677,7 @@ const Contact = () => {
                   >
                     ✓
                   </span>
+
                   Thanks! Your message was sent successfully.
                 </div>
               </div>
@@ -722,10 +740,10 @@ const Contact = () => {
                   const Wrapper = c.href ? 'a' : 'div';
                   const props = c.href
                     ? {
-                        href: c.href,
-                        className:
-                          'group flex items-start gap-3 transition-transform duration-300 hover:translate-x-1',
-                      }
+                      href: c.href,
+                      className:
+                        'group flex items-start gap-3 transition-transform duration-300 hover:translate-x-1',
+                    }
                     : { className: 'flex items-start gap-3' };
                   return (
                     <Wrapper key={c.label} {...props}>
