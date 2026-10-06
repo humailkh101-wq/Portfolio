@@ -565,7 +565,7 @@ const Contact = () => {
               </p>
             </div>
             <form
-              action="https://formsubmit.co/tovoh18417@cwsgear.com"
+              action="https://formsubmit.co/m.humail101@gmail.com"
               method="POST"
             >
               {/* FormSubmit settings */}
