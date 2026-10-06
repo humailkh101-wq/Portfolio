@@ -29,28 +29,28 @@ const STATS = [
    ========================================================= */
 const TIMELINE = [
     {
-        year: '2022',
+        year: '2026',
         title: 'Started Software Engineering',
         org: 'Mehran UET',
         desc: 'Began my journey in Software Engineering — mastering C++, data structures, and algorithms.',
         tag: 'Education',
     },
     {
-        year: '2023',
+        year: '2024',
         title: 'Full-Stack Development',
         org: 'Self-taught + Bootcamps',
         desc: 'Learned React, Node.js, and modern web architecture. Shipped my first production web apps.',
         tag: 'Web',
     },
     {
-        year: '2024',
+        year: '2025',
         title: 'AI Engineering (Python)',
         org: 'Personal + Open Source',
         desc: 'Dove into Python, ML, and AI-powered solutions. Built intelligent tools and automation systems.',
         tag: 'AI',
     },
     {
-        year: '2025',
+        year: '2023',
         title: 'Building Scalable Systems',
         org: 'Freelance + Projects',
         desc: 'Now building scalable web applications and AI-powered solutions for real clients.',
