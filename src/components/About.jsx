@@ -722,16 +722,62 @@ const About = () => {
                         <a
                             download
                             href="/resume.pdf"
-                            className="inline-flex items-center gap-3 px-6 py-3 rounded-xl font-bold text-sm transition-all duration-300 hover:scale-105 active:scale-95"
+                            className="group relative inline-flex items-center gap-3 px-6 py-3 rounded-xl font-bold text-sm overflow-hidden active:scale-95"
                             style={{
                                 background: `linear-gradient(90deg, ${COLORS.greenLight}, ${COLORS.greenBright}, ${COLORS.greenLight})`,
+                                backgroundSize: '200% 100%',
                                 color: COLORS.navyPrimary,
                                 boxShadow:
                                     '0 6px 20px -4px rgba(74,222,128,0.55), 0 14px 40px -10px rgba(34,197,94,0.45), inset 0 1px 0 0 rgba(255,255,255,0.4)',
+                                transition: 'all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                            }}
+                            onMouseEnter={(e) => {
+                                e.currentTarget.style.background =
+                                    'linear-gradient(90deg, #22D3EE, #38BDF8, #22D3EE)';
+                                e.currentTarget.style.backgroundSize = '200% 100%';
+                                e.currentTarget.style.color = '#FFFFFF';
+                                e.currentTarget.style.transform = 'scale(1.08) translateY(-2px)';
+                                e.currentTarget.style.boxShadow =
+                                    '0 10px 30px -4px rgba(34,211,238,0.75), 0 20px 55px -10px rgba(56,189,248,0.55), inset 0 1px 0 0 rgba(255,255,255,0.5)';
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.background =
+                                    `linear-gradient(90deg, ${COLORS.greenLight}, ${COLORS.greenBright}, ${COLORS.greenLight})`;
+                                e.currentTarget.style.backgroundSize = '200% 100%';
+                                e.currentTarget.style.color = COLORS.navyPrimary;
+                                e.currentTarget.style.transform = 'scale(1) translateY(0)';
+                                e.currentTarget.style.boxShadow =
+                                    '0 6px 20px -4px rgba(74,222,128,0.55), 0 14px 40px -10px rgba(34,197,94,0.45), inset 0 1px 0 0 rgba(255,255,255,0.4)';
                             }}
                         >
-                            Download CV
-                            <span>↓</span>
+                            {/* Shimmer sweep on hover */}
+                            <span
+                                className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                                style={{
+                                    background:
+                                        'linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.4) 50%, transparent 70%)',
+                                    transform: 'translateX(-100%)',
+                                    animation: 'cvShimmer 1.2s ease-out infinite',
+                                }}
+                            />
+
+                            {/* Text + icon */}
+                            <span className="relative z-10 flex items-center gap-3">
+                                Download CV
+                                <span
+                                    className="inline-block transition-transform duration-500 group-hover:translate-y-1 group-hover:rotate-[360deg]"
+                                >
+                                    ↓
+                                </span>
+                            </span>
+
+                            {/* Local keyframe */}
+                            <style>{`
+        @keyframes cvShimmer {
+            0%   { transform: translateX(-100%) skewX(-15deg); }
+            100% { transform: translateX(200%) skewX(-15deg); }
+        }
+    `}</style>
                         </a>
                     </div>
                 </div>
