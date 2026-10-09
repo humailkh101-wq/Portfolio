@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 
 /* =========================================================
    COLOR PALETTE — Navy Blue · White · Light Green
@@ -25,7 +25,7 @@ const STATS = [
 ];
 
 /* =========================================================
-   TIMELINE DATA — matches your skills
+   TIMELINE DATA
    ========================================================= */
 const TIMELINE = [
     {
@@ -113,6 +113,336 @@ const AnimatedCounter = ({ value, suffix, duration = 1800, start }) => {
 };
 
 /* =========================================================
+   ANIMATED BACKGROUND (Hero-style)
+   ========================================================= */
+const AboutBackground = ({ mouse }) => {
+    const particles = useMemo(
+        () =>
+            Array.from({ length: 30 }).map((_, i) => ({
+                id: i,
+                left: Math.random() * 100,
+                top: Math.random() * 100,
+                size: Math.random() * 2.5 + 1,
+                duration: Math.random() * 12 + 8,
+                delay: Math.random() * 8,
+                driftX: (Math.random() - 0.5) * 60,
+                driftY: -(Math.random() * 80 + 40),
+                opacity: Math.random() * 0.5 + 0.15,
+                green: Math.random() > 0.4,
+            })),
+        []
+    );
+
+    const shootingStars = useMemo(
+        () =>
+            Array.from({ length: 3 }).map((_, i) => ({
+                id: i,
+                top: Math.random() * 60,
+                delay: Math.random() * 12,
+                duration: Math.random() * 3 + 4,
+            })),
+        []
+    );
+
+    return (
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            {/* ── Base gradient ── */}
+            <div
+                className="absolute inset-0"
+                style={{
+                    background: `radial-gradient(circle at 85% 15%, ${COLORS.navyLight} 0%, ${COLORS.navyPrimary} 50%, ${COLORS.navyDark} 100%)`,
+                }}
+            />
+
+            {/* ── Aurora layer 1 — top right drift ── */}
+            <div
+                className="absolute inset-0 opacity-60"
+                style={{
+                    background:
+                        'radial-gradient(ellipse 55% 50% at 85% 15%, rgba(134,239,172,0.20), transparent 60%)',
+                    animation: 'auroraDrift1 20s ease-in-out infinite alternate',
+                    transform: `translate(${mouse.x * -15}px, ${mouse.y * -15}px)`,
+                }}
+            />
+
+            {/* ── Aurora layer 2 — bottom left drift ── */}
+            <div
+                className="absolute inset-0 opacity-70"
+                style={{
+                    background:
+                        'radial-gradient(ellipse 65% 55% at 15% 85%, rgba(74,222,128,0.16), transparent 60%)',
+                    animation: 'auroraDrift2 24s ease-in-out infinite alternate',
+                    transform: `translate(${mouse.x * 20}px, ${mouse.y * 20}px)`,
+                }}
+            />
+
+            {/* ── Aurora layer 3 — center pulse ── */}
+            <div
+                className="absolute inset-0 opacity-40"
+                style={{
+                    background:
+                        'radial-gradient(circle 35% at 50% 50%, rgba(34,197,94,0.10), transparent 70%)',
+                    animation: 'auroraPulse 12s ease-in-out infinite',
+                }}
+            />
+
+            {/* ── Conic gradient orb (top left) ── */}
+            <div
+                className="absolute -top-40 -left-40 w-[550px] h-[550px] rounded-full blur-[110px]"
+                style={{
+                    background: `conic-gradient(from 0deg, transparent, rgba(134,239,172,0.22), transparent, rgba(74,222,128,0.20), transparent)`,
+                    animation: 'spinSlow 26s linear infinite',
+                    transform: `translate(${mouse.x * -30}px, ${mouse.y * -30}px)`,
+                }}
+            />
+
+            {/* ── Conic gradient orb (bottom right) ── */}
+            <div
+                className="absolute -bottom-40 -right-40 w-[550px] h-[550px] rounded-full blur-[110px]"
+                style={{
+                    background: `conic-gradient(from 180deg, transparent, rgba(34,197,94,0.22), transparent, rgba(134,239,172,0.18), transparent)`,
+                    animation: 'spinSlow 30s linear infinite reverse',
+                    transform: `translate(${mouse.x * 30}px, ${mouse.y * 30}px)`,
+                }}
+            />
+
+            {/* ── Animated grid ── */}
+            <div
+                className="absolute inset-0 opacity-[0.05]"
+                style={{
+                    backgroundImage:
+                        'linear-gradient(rgba(134,239,172,0.9) 1px, transparent 1px), linear-gradient(90deg, rgba(134,239,172,0.9) 1px, transparent 1px)',
+                    backgroundSize: '60px 60px',
+                    maskImage:
+                        'radial-gradient(ellipse 75% 75% at 50% 50%, black 30%, transparent 100%)',
+                    WebkitMaskImage:
+                        'radial-gradient(ellipse 75% 75% at 50% 50%, black 30%, transparent 100%)',
+                    animation: 'gridShift 25s linear infinite',
+                }}
+            />
+
+            {/* ── Floating particles ── */}
+            {particles.map((p) => (
+                <span
+                    key={p.id}
+                    className="absolute rounded-full"
+                    style={{
+                        left: `${p.left}%`,
+                        top: `${p.top}%`,
+                        width: `${p.size}px`,
+                        height: `${p.size}px`,
+                        background: p.green ? COLORS.greenLight : COLORS.white,
+                        opacity: p.opacity,
+                        boxShadow: p.green
+                            ? `0 0 ${p.size * 4}px ${COLORS.greenLight}`
+                            : `0 0 ${p.size * 3}px rgba(255,255,255,0.5)`,
+                        animation: `particleFloat ${p.duration}s ease-in-out ${p.delay}s infinite`,
+                        '--drift-x': `${p.driftX}px`,
+                        '--drift-y': `${p.driftY}px`,
+                    }}
+                />
+            ))}
+
+            {/* ── Shooting stars ── */}
+            {shootingStars.map((s) => (
+                <span
+                    key={s.id}
+                    className="absolute h-[2px] w-20"
+                    style={{
+                        top: `${s.top}%`,
+                        left: '-10%',
+                        background: `linear-gradient(90deg, transparent, ${COLORS.greenLight}, transparent)`,
+                        filter: 'drop-shadow(0 0 6px rgba(134,239,172,0.8))',
+                        animation: `shootingStar ${s.duration}s linear ${s.delay}s infinite`,
+                        opacity: 0,
+                    }}
+                />
+            ))}
+
+            {/* ── Beam scan lines ── */}
+            {[20, 55, 80].map((left, i) => (
+                <div
+                    key={i}
+                    className="absolute top-0 bottom-0 w-[1px] opacity-20"
+                    style={{
+                        left: `${left}%`,
+                        background: `linear-gradient(180deg, transparent, ${COLORS.greenLight}, transparent)`,
+                        animation: `beamScan ${10 + i * 2}s linear ${i * 1.5}s infinite`,
+                    }}
+                />
+            ))}
+
+            {/* ── Floating tech symbols ── */}
+            <div
+                className="absolute top-[12%] left-[6%] text-3xl font-mono select-none"
+                style={{
+                    color: 'rgba(134,239,172,0.10)',
+                    animation: 'symbolFloat 14s ease-in-out infinite',
+                }}
+            >
+                {'<html>'}
+            </div>
+            <div
+                className="absolute bottom-[15%] right-[6%] text-3xl font-mono select-none"
+                style={{
+                    color: 'rgba(134,239,172,0.08)',
+                    animation: 'symbolFloat 16s ease-in-out 2s infinite reverse',
+                }}
+            >
+                {'npm install'}
+            </div>
+            <div
+                className="absolute top-[70%] left-[4%] text-2xl font-mono select-none"
+                style={{
+                    color: 'rgba(134,239,172,0.09)',
+                    animation: 'symbolFloat 12s ease-in-out 1s infinite',
+                }}
+            >
+                {'() => {}'}
+            </div>
+
+            {/* ── Dot matrix corners (only 2 for subtlety) ── */}
+            {[
+                { top: '8%', right: '5%' },
+                { bottom: '8%', left: '5%' },
+            ].map((pos, i) => (
+                <div
+                    key={i}
+                    className="absolute grid grid-cols-4 gap-1.5"
+                    style={{ ...pos, animation: `cornerPulse 5s ease-in-out ${i * 0.6}s infinite` }}
+                >
+                    {Array.from({ length: 16 }).map((_, j) => (
+                        <span
+                            key={j}
+                            className="w-1 h-1 rounded-full"
+                            style={{
+                                background: 'rgba(134,239,172,0.35)',
+                                animation: `dotBlink 3s ease-in-out ${(i + j) * 0.1}s infinite`,
+                            }}
+                        />
+                    ))}
+                </div>
+            ))}
+
+            {/* ── Bottom waves ── */}
+            <svg
+                className="absolute bottom-0 left-0 w-full h-24 opacity-20"
+                viewBox="0 0 1440 100"
+                preserveAspectRatio="none"
+            >
+                <path
+                    fill="none"
+                    stroke={COLORS.greenLight}
+                    strokeWidth="1"
+                    d="M0,50 C240,10 480,90 720,50 C960,10 1200,90 1440,50"
+                    style={{ animation: 'waveMove 9s ease-in-out infinite' }}
+                />
+                <path
+                    fill="none"
+                    stroke={COLORS.greenBright}
+                    strokeWidth="1"
+                    d="M0,60 C240,20 480,100 720,60 C960,20 1200,100 1440,60"
+                    style={{ animation: 'waveMove 13s ease-in-out 1s infinite reverse' }}
+                />
+            </svg>
+
+            {/* ── Top waves (subtle, mirrored) ── */}
+            <svg
+                className="absolute top-0 left-0 w-full h-16 opacity-[0.12]"
+                viewBox="0 0 1440 100"
+                preserveAspectRatio="none"
+                style={{ transform: 'scaleY(-1)' }}
+            >
+                <path
+                    fill="none"
+                    stroke={COLORS.greenLight}
+                    strokeWidth="1"
+                    d="M0,50 C240,10 480,90 720,50 C960,10 1200,90 1440,50"
+                    style={{ animation: 'waveMove 11s ease-in-out infinite reverse' }}
+                />
+            </svg>
+
+            {/* ── Cursor glow ── */}
+            <div
+                className="absolute w-[500px] h-[500px] rounded-full blur-[100px] pointer-events-none"
+                style={{
+                    background: 'radial-gradient(circle, rgba(134,239,172,0.08), transparent 70%)',
+                    transform: `translate(calc(50vw + ${mouse.x * 200}px - 250px), calc(50vh + ${mouse.y * 200}px - 250px))`,
+                    transition: 'transform 0.6s ease-out',
+                }}
+            />
+
+            {/* ── Noise texture ── */}
+            <div
+                className="absolute inset-0 opacity-[0.015] mix-blend-overlay"
+                style={{
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+                }}
+            />
+
+            {/* ── Keyframes ── */}
+            <style>{`
+                @keyframes auroraDrift1 {
+                    0%   { transform: translate(0, 0) scale(1); }
+                    50%  { transform: translate(40px, -30px) scale(1.1); }
+                    100% { transform: translate(-20px, 20px) scale(1.05); }
+                }
+                @keyframes auroraDrift2 {
+                    0%   { transform: translate(0, 0) scale(1); }
+                    50%  { transform: translate(-50px, 30px) scale(1.15); }
+                    100% { transform: translate(30px, -40px) scale(1.05); }
+                }
+                @keyframes auroraPulse {
+                    0%, 100% { opacity: 0.3; transform: scale(1); }
+                    50%      { opacity: 0.6; transform: scale(1.15); }
+                }
+                @keyframes spinSlow {
+                    from { transform: rotate(0deg); }
+                    to   { transform: rotate(360deg); }
+                }
+                @keyframes gridShift {
+                    0%   { background-position: 0 0, 0 0; }
+                    100% { background-position: 60px 60px, 60px 60px; }
+                }
+                @keyframes particleFloat {
+                    0%, 100% { transform: translate(0, 0); }
+                    50%      { transform: translate(var(--drift-x), var(--drift-y)); }
+                }
+                @keyframes shootingStar {
+                    0%   { transform: translate(0, 0) rotate(15deg); opacity: 0; }
+                    10%  { opacity: 1; }
+                    100% { transform: translate(120vw, 30vh) rotate(15deg); opacity: 0; }
+                }
+                @keyframes beamScan {
+                    0%   { transform: translateY(-100%); opacity: 0; }
+                    20%  { opacity: 0.5; }
+                    80%  { opacity: 0.5; }
+                    100% { transform: translateY(100%); opacity: 0; }
+                }
+                @keyframes symbolFloat {
+                    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+                    25%      { transform: translate(15px, -20px) rotate(6deg); }
+                    50%      { transform: translate(-10px, -35px) rotate(-4deg); }
+                    75%      { transform: translate(-20px, -15px) rotate(5deg); }
+                }
+                @keyframes cornerPulse {
+                    0%, 100% { opacity: 0.4; transform: scale(1); }
+                    50%      { opacity: 1; transform: scale(1.08); }
+                }
+                @keyframes dotBlink {
+                    0%, 100% { opacity: 0.25; }
+                    50%      { opacity: 1; box-shadow: 0 0 8px rgba(134,239,172,0.9); }
+                }
+                @keyframes waveMove {
+                    0%, 100% { transform: translateX(0); }
+                    50%      { transform: translateX(-40px); }
+                }
+            `}</style>
+        </div>
+    );
+};
+
+/* =========================================================
    ABOUT SECTION
    ========================================================= */
 const About = () => {
@@ -121,11 +451,12 @@ const About = () => {
     const [statsRef, statsInView] = useInView(0.3);
     const [timelineRef, timelineInView] = useInView(0.15);
     const [mouse, setMouse] = useState({ x: 0, y: 0 });
+    const containerRef = useRef(null);
 
-    /* Mouse parallax for image */
+    /* Mouse parallax — captured at section level so bg + image both react */
     useEffect(() => {
         const onMove = (e) => {
-            const rect = imageRef.current?.getBoundingClientRect();
+            const rect = containerRef.current?.getBoundingClientRect();
             if (!rect) return;
             const x = (e.clientX - rect.left - rect.width / 2) / rect.width;
             const y = (e.clientY - rect.top - rect.height / 2) / rect.height;
@@ -133,46 +464,35 @@ const About = () => {
         };
         window.addEventListener('mousemove', onMove);
         return () => window.removeEventListener('mousemove', onMove);
-    }, [imageRef]);
+    }, []);
 
     return (
         <section
             id="about"
-            ref={sectionRef}
-            className="relative overflow-hidden py-24 sm:py-32 px-4 sm:px-6 lg:px-8"
-            style={{
-                backgroundColor: COLORS.navyPrimary,
-                background: `radial-gradient(circle at 85% 15%, ${COLORS.navyLight} 0%, ${COLORS.navyPrimary} 50%, ${COLORS.navyDark} 100%)`,
+            ref={(node) => {
+                sectionRef.current = node;
+                containerRef.current = node;
             }}
+            className="relative overflow-hidden py-24 sm:py-32 px-4 sm:px-6 lg:px-8"
+            style={{ backgroundColor: COLORS.navyPrimary }}
         >
-            {/* ───── Background decorations ───── */}
-            <div
-                className="absolute top-20 -left-32 w-96 h-96 rounded-full blur-[120px] pointer-events-none"
-                style={{ background: 'radial-gradient(circle, rgba(134,239,172,0.15), transparent 70%)' }}
-            />
-            <div
-                className="absolute bottom-20 -right-32 w-96 h-96 rounded-full blur-[120px] pointer-events-none"
-                style={{ background: 'radial-gradient(circle, rgba(74,222,128,0.12), transparent 70%)' }}
-            />
+            {/* ═══════ ANIMATED BACKGROUND ═══════ */}
+            <AboutBackground mouse={mouse} />
 
             <style>{`
-        @keyframes floatY {
-          0%, 100% { transform: translateY(0); }
-          50%      { transform: translateY(-14px); }
-        }
-        @keyframes spinSlow {
-          from { transform: rotate(0deg); }
-          to   { transform: rotate(360deg); }
-        }
-        @keyframes badgePulse {
-          0%, 100% { box-shadow: 0 0 0 0 rgba(134,239,172,0.4); }
-          50%      { box-shadow: 0 0 0 10px rgba(134,239,172,0); }
-        }
-        @keyframes dash {
-          from { stroke-dashoffset: 1000; }
-          to   { stroke-dashoffset: 0; }
-        }
-      `}</style>
+                @keyframes floatY {
+                    0%, 100% { transform: translateY(0); }
+                    50%      { transform: translateY(-14px); }
+                }
+                @keyframes spinSlow {
+                    from { transform: rotate(0deg); }
+                    to   { transform: rotate(360deg); }
+                }
+                @keyframes badgePulse {
+                    0%, 100% { box-shadow: 0 0 0 0 rgba(134,239,172,0.4); }
+                    50%      { box-shadow: 0 0 0 10px rgba(134,239,172,0); }
+                }
+            `}</style>
 
             <div className="relative z-10 max-w-7xl mx-auto">
 
@@ -233,7 +553,6 @@ const About = () => {
                                 transition: 'transform 0.4s ease-out',
                             }}
                         >
-                            {/* Rotating dashed ring */}
                             <div
                                 className="absolute inset-0 pointer-events-none"
                                 style={{
@@ -254,7 +573,6 @@ const About = () => {
                                 </svg>
                             </div>
 
-                            {/* Glow */}
                             <div
                                 className="absolute inset-0 rounded-3xl blur-3xl pointer-events-none"
                                 style={{
@@ -263,7 +581,6 @@ const About = () => {
                                 }}
                             />
 
-                            {/* Image container — rounded rect for a modern look */}
                             <div
                                 className="relative w-72 h-80 sm:w-80 sm:h-96 lg:w-[420px] lg:h-[500px] rounded-3xl overflow-hidden"
                                 style={{
@@ -278,14 +595,12 @@ const About = () => {
                                     className="w-full h-full object-cover"
                                     style={{ filter: 'brightness(1.05) contrast(1.05)' }}
                                 />
-                                {/* Navy tint + gradient overlay */}
                                 <div
                                     className="absolute inset-0 pointer-events-none"
                                     style={{
                                         background: `linear-gradient(180deg, transparent 40%, rgba(10,31,61,0.55) 85%, rgba(4,16,31,0.85) 100%)`,
                                     }}
                                 />
-                                {/* Green corner accent */}
                                 <div
                                     className="absolute top-0 left-0 w-20 h-20 pointer-events-none"
                                     style={{
@@ -293,7 +608,6 @@ const About = () => {
                                     }}
                                 />
 
-                                {/* Bottom info strip */}
                                 <div className="absolute bottom-0 left-0 right-0 p-5 flex items-end justify-between">
                                     <div>
                                         <p className="text-white font-bold text-lg leading-none">Muhammad Humail</p>
@@ -312,7 +626,6 @@ const About = () => {
                                 </div>
                             </div>
 
-                            {/* Floating badge — top right */}
                             <div
                                 className="absolute -top-4 -right-4 px-4 py-3 rounded-2xl backdrop-blur-md"
                                 style={{
@@ -330,7 +643,6 @@ const About = () => {
                                 </p>
                             </div>
 
-                            {/* Floating badge — bottom left */}
                             <div
                                 className="absolute -bottom-4 -left-4 px-4 py-3 rounded-2xl backdrop-blur-md"
                                 style={{
@@ -366,7 +678,6 @@ const About = () => {
                             <span style={{ color: COLORS.greenLight }}>building</span> things that matter.
                         </h3>
 
-                        {/* Reveal-by-line paragraphs */}
                         <div className="space-y-4 mb-8">
                             {[
                                 `I'm Humail — a Full-Stack Developer, AI Engineer (Python), and C++ Developer currently studying Software Engineering at Mehran UET.`,
@@ -388,7 +699,6 @@ const About = () => {
                             ))}
                         </div>
 
-                        {/* Skill chips */}
                         <div className="flex flex-wrap gap-2 justify-center lg:justify-start mb-8">
                             {['Full-Stack', 'AI / ML', 'Python', 'C++', 'React', 'Node.js'].map((skill, i) => (
                                 <span
@@ -409,17 +719,9 @@ const About = () => {
                             ))}
                         </div>
 
-                        {/* CTA */}
                         <a
-                            href="#contact"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                const el = document.getElementById('contact');
-                                if (el) {
-                                    const offset = el.getBoundingClientRect().top + window.pageYOffset - 80;
-                                    window.scrollTo({ top: offset, behavior: 'smooth' });
-                                }
-                            }}
+                            download
+                            href="/resume.pdf"
                             className="inline-flex items-center gap-3 px-6 py-3 rounded-xl font-bold text-sm transition-all duration-300 hover:scale-105 active:scale-95"
                             style={{
                                 background: `linear-gradient(90deg, ${COLORS.greenLight}, ${COLORS.greenBright}, ${COLORS.greenLight})`,
@@ -463,7 +765,6 @@ const About = () => {
                                     'inset 0 1px 0 0 rgba(255,255,255,0.06), 0 10px 40px -15px rgba(0,0,0,0.6)';
                             }}
                         >
-                            {/* Hover glow */}
                             <div
                                 className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                                 style={{
@@ -517,9 +818,7 @@ const About = () => {
                         </h3>
                     </div>
 
-                    {/* Timeline */}
                     <div className="relative max-w-4xl mx-auto">
-                        {/* Vertical line */}
                         <div
                             className="absolute left-4 sm:left-1/2 top-0 bottom-0 w-[2px] sm:-translate-x-1/2 pointer-events-none"
                             style={{
@@ -544,7 +843,6 @@ const About = () => {
                                         className={`relative flex items-start sm:items-center gap-6 sm:gap-0 ${isLeft ? 'sm:flex-row' : 'sm:flex-row-reverse'
                                             }`}
                                     >
-                                        {/* Card */}
                                         <div
                                             className={`flex-1 pl-16 sm:pl-0 sm:pr-0 ${isLeft ? 'sm:pr-16' : 'sm:pl-16'}`}
                                             style={{
@@ -606,7 +904,6 @@ const About = () => {
                                             </div>
                                         </div>
 
-                                        {/* Dot on the line */}
                                         <div className="absolute left-4 sm:left-1/2 top-6 sm:top-1/2 -translate-x-1/2 sm:-translate-y-1/2 z-10">
                                             <span
                                                 className="block w-4 h-4 rounded-full"
@@ -621,7 +918,6 @@ const About = () => {
                                             />
                                         </div>
 
-                                        {/* Empty spacer for the other column on desktop */}
                                         <div className="hidden sm:block flex-1" />
                                     </div>
                                 );
